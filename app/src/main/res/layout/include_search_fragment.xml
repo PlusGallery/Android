@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/colorPopupDarker"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:background="@color/colorPopup"
+            android:layout_width="fill_parent"
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/colorPrimaryFriendly"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="15.0dip"
+                android:layout_marginEnd="15.0dip"
+                android:text="@string/filter_title"
+                app:fontFamily="sans-serif-medium" />
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0" />
+
+            <ImageButton
+                android:id="@+id/btnClose"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_width="?actionBarSize"
+                android:layout_height="?actionBarSize"
+                android:tint="@color/colorPrimaryFriendly"
+                app:srcCompat="@drawable/ic_baseline_close_24" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="1.0"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:padding="15.0dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_safeMode" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10.0dip"
+                android:background="@color/colorPopup">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:text="@string/filter_adultContent" />
+
+                <View
+                    android:layout_width="0.0dip"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/safeMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10.0dip"
+                    android:checked="false"
+                    app:trackTint="@color/switch_color_primary"
+                    app:thumbTint="@color/switch_color_primary" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="15.0dip" />
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_userProps" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/colorPopup"
+                android:layout_width="fill_parent"
+                android:layout_height="40.0dip"
+                android:layout_marginTop="10.0dip">
+
+                <EditText
+                    android:background="@color/transparent"
+                    android:paddingStart="10.0dip"
+                    android:paddingEnd="10.0dip"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:hint="@string/filter_creator" />
+
+            </LinearLayout>
+
+            <View
+                android:background="@color/colorPopupDarker"
+                android:layout_width="match_parent"
+                android:layout_height="1.0dip" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/colorPopup"
+                android:layout_width="fill_parent"
+                android:layout_height="40.0dip">
+
+                <EditText
+                    android:background="@color/transparent"
+                    android:paddingStart="10.0dip"
+                    android:paddingEnd="10.0dip"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:hint="@string/filter_favorite" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="15.0dip" />
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_poolProps" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/colorPopup"
+                android:layout_width="fill_parent"
+                android:layout_height="40.0dip"
+                android:layout_marginTop="10.0dip">
+
+                <EditText
+                    android:background="@color/transparent"
+                    android:paddingStart="10.0dip"
+                    android:paddingEnd="10.0dip"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:hint="@string/filter_featured" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="15.0dip" />
+
+            <TextView
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_date" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@color/colorPopup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10.0dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_marginRight="15.0dip"
+                    android:text="@string/filter_time_placeholder" />
+
+                <View
+                    android:layout_width="0.0dip"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0" />
+
+                <ImageView
+                    android:layout_width="25.0dip"
+                    android:layout_height="25.0dip"
+                    android:layout_margin="10.0dip"
+                    android:tint="@color/colorPrimaryFriendly"
+                    app:srcCompat="@drawable/ic_baseline_arrow_right_24" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:background="@color/colorPrimaryFriendly"
+        android:layout_width="fill_parent"
+        android:layout_height="?actionBarSize">
+
+        <TextView
+            android:id="@+id/btnApply"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:fontFamily="sans-serif-medium"
+            android:text="@string/filter_apply" />
+
+    </RelativeLayout>
+</LinearLayout>

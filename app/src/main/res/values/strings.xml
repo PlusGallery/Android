@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">+Gallery</string>
+    <string name="title_search">Search</string>
+    <string name="title_collections">Collections</string>
+    <string name="title_extensions">Extensions</string>
+    <string name="title_settings">Settings</string>
+    <string name="searchBar_search">Search</string>
+    <string name="filter_title">Filter</string>
+    <string name="filter_safeMode">Safe Mode</string>
+    <string name="filter_adultContent">Adult content</string>
+    <string name="filter_userProps">User properties</string>
+    <string name="filter_creator">Created by</string>
+    <string name="filter_favorite">Favorited by</string>
+    <string name="filter_poolProps">Pool properties</string>
+    <string name="filter_featured">Featured in</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_time_placeholder">Select time period</string>
+    <string name="filter_apply">Apply</string>
+</resources>

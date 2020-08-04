@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme-specific colors -->
+    <color name="colorPrimary">#17212B</color>
+    <color name="colorPrimaryDark">#242F3D</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimaryFriendly">@color/colorAccent</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorPopup">@color/colorPrimaryDark</color>
+    <color name="colorPopupDarker">@color/colorPrimary</color>
+    <color name="colorStroke">#FFFFFF</color>
+
+    <!-- Constant colors -->
+    <color name="colorImportant">#f44336</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>

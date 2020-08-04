@@ -1,0 +1,3 @@
+include ':app:extension'
+include ':app'
+rootProject.name = "+Gallery"

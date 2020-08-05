@@ -23,9 +23,9 @@ interface SortType {
      */
     fun text(): String
     /**
-     * Get a valid resource drawable path
+     * Get a valid resource id for a drawable
      *
-     * @return A string value representing a resource name
+     * @return A valid resource id
      */
-    fun drawable(): String
+    fun resId(): Int
 }

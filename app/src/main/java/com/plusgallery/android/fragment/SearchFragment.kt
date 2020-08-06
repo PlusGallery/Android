@@ -47,7 +47,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnClickLi
     }
 
     override fun onSearchStateChanged(enabled: Boolean) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onSearchConfirmed(text: CharSequence?) {

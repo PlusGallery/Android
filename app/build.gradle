@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -34,6 +39,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     // Material style
     implementation 'com.google.android.material:material:1.1.0'
+    // Flexbox
+    implementation 'com.google.android:flexbox:2.0.1'
     // Preferences
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.preference:preference-ktx:1.1.1'

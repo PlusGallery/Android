@@ -55,6 +55,32 @@ class ExtensionManager(private val context: Context) {
         }
     }
 
+    fun update(extension: StoredExtension, invoker: (success: Boolean) -> Unit) {
+        // Delete stored link and file
+        val file = File(context.cacheDir, extension.packageName)
+        HttpClient().download(Http.get(extension.remote.fileFullPath()), file) {
+            if (it is Response && it.isSuccessful) {
+                // Parse extension if possible
+                val stored = StoredExtension.parse(context, file.absolutePath)
+                if (stored == null) {
+                    // Remove from list, since there is no way
+                    // for us to restore it as it's now incompatible.
+                    storedMap.remove(extension.packageName)
+                    // Put it back on remote
+                    remoteMap[extension.packageName] = extension.remote
+                    invoker(false)
+                    return@download
+                }
+                // Add stored link
+                stored.remote = extension.remote
+                storedMap[stored.packageName] = stored
+                invoker(true)
+            } else {
+                invoker(false)
+            }
+        }
+    }
+
     fun uninstall(extension: StoredExtension) {
         // Copy as a remote one
         if (extension.hasRemote())
@@ -64,7 +90,7 @@ class ExtensionManager(private val context: Context) {
         File(extension.filePath).delete()
     }
 
-    fun install(context: Context, extension: RemoteExtension, invoker: (success: Boolean) -> Unit) {
+    fun install(extension: RemoteExtension, invoker: (success: Boolean) -> Unit) {
         val file = File(context.cacheDir, extension.packageName)
         HttpClient().download(Http.get(extension.fileFullPath()), file) {
             if (it is Response && it.isSuccessful) {

@@ -17,4 +17,6 @@
     <string name="filter_date">Date</string>
     <string name="filter_time_placeholder">Select time period</string>
     <string name="filter_apply">Apply</string>
+    <string name="placeholder_title">Title</string>
+    <string name="placeholder_subtitle">Subtitle</string>
 </resources>

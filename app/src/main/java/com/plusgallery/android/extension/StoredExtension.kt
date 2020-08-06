@@ -24,11 +24,11 @@ class StoredExtension {
             val manager = context.packageManager
             val extension = StoredExtension()
 
-            val pkg = manager.getPackageArchiveInfo(path, PackageManager.GET_META_DATA)
-                ?: return null
+            val pkg = manager.getPackageArchiveInfo(path, PackageManager.GET_META_DATA
+                    or PackageManager.GET_ACTIVITIES) ?: return null
             extension.pkgInfo = pkg
 
-            val basePath = pkg.applicationInfo.metaData.getString("base_class")
+            val basePath = pkg.applicationInfo.metaData.getString(BaseInterface::class.simpleName)
                 ?: return null
             val loader = PathClassLoader(path, null, context.classLoader)
             val instance = loader.loadClass(pkg.packageName.plus(basePath)).newInstance()

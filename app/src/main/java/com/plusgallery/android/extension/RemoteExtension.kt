@@ -9,7 +9,7 @@ class RemoteExtension {
     var filePath: String = ""
 
     companion object {
-        const val REMOTE_ROOT = "https://raw.githubusercontent.com/PlusGallery/Extension/master"
+        const val REMOTE_ROOT = "https://raw.githubusercontent.com/PlusGallery/Extension/Test"
     }
 
     fun iconFullPath(): String {

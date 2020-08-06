@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/extensions_update"
+        android:icon="@drawable/ic_baseline_downward_24"
+        android:title="Update" />
+    <item
+        android:id="@+id/extensions_delete"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="Delete" />
+</menu>

@@ -15,5 +15,6 @@
         android:fontFamily="sans-serif-smallcaps"
         android:paddingBottom="32dp"
         android:text="@string/app_name"
-        android:textSize="28sp" />
+        android:textSize="28sp"
+        tools:alpha="1"/>
 </FrameLayout>

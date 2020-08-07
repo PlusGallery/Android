@@ -42,4 +42,9 @@
     <style name="Widget.MaterialComponents.TabLayout.Icon" parent="Widget.MaterialComponents.TabLayout.Colored">
         <item name="tabIconTint">@null</item>
     </style>
+
+    <style name="Widget.MaterialComponents.FloatingActionButton.Inverted" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/mtrl_fab_bg_color_selector_inverted</item>
+        <item name="tint">@color/mtrl_fab_icon_text_color_selector_inverted</item>
+    </style>
 </resources>

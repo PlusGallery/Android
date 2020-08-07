@@ -29,7 +29,6 @@ class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
         setSupportActionBar(toolBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         haulerView.setOnDragDismissedListener {
             finish() // finish activity when dismissed
         }

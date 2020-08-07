@@ -9,7 +9,7 @@ import dalvik.system.PathClassLoader
 
 class StoredExtension {
     private lateinit var pkgInfo: PackageInfo
-    private lateinit var baseClass: BaseInterface
+    lateinit var baseClass: BaseInterface
     lateinit var remote: RemoteExtension
     val icon: Int get() = pkgInfo.applicationInfo.icon
     val label: Int get() = pkgInfo.applicationInfo.labelRes

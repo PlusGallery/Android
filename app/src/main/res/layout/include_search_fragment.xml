@@ -112,6 +112,7 @@
                 android:layout_marginTop="10.0dip">
 
                 <EditText
+                    android:id="@+id/ownerId"
                     android:background="@color/transparent"
                     android:paddingStart="10.0dip"
                     android:paddingEnd="10.0dip"
@@ -133,6 +134,7 @@
                 android:layout_height="40.0dip">
 
                 <EditText
+                    android:id="@+id/favById"
                     android:background="@color/transparent"
                     android:paddingStart="10.0dip"
                     android:paddingEnd="10.0dip"
@@ -160,6 +162,7 @@
                 android:layout_marginTop="10.0dip">
 
                 <EditText
+                    android:id="@+id/poolId"
                     android:background="@color/transparent"
                     android:paddingStart="10.0dip"
                     android:paddingEnd="10.0dip"

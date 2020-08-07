@@ -63,7 +63,7 @@ dependencies {
     // Activity swipe to close behaviour
     implementation "com.thefuntasty.hauler:core:3.1.0"
     // Zooming image lib
-    implementation 'com.github.PlusGallery:PhotoView:2.3.0'
+    implementation 'com.jsibbold:zoomage:1.3.1'
 
     // Networking
     implementation "com.squareup.okhttp3:okhttp:4.4.0"

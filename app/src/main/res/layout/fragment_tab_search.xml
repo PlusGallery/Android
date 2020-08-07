@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="?android:windowBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linealLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.tabs.TabLayout
+            style="@style/Widget.MaterialComponents.TabLayout"
+            android:id="@+id/sortLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:tabGravity="fill"
+            app:layout_collapseMode="parallax"
+            app:tabIndicatorColor="@color/colorPrimaryFriendly"
+            app:tabInlineLabel="true"
+            app:tabMode="scrollable"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sortSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="6dp"
+            android:checked="false"
+            android:enabled="false"
+            android:text="Asc "
+            app:thumbTint="@color/switch_color_primary"
+            app:trackTint="@color/switch_color_primary"/>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginBottom="2dp"
+                android:nestedScrollingEnabled="true"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

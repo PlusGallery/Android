@@ -3,6 +3,7 @@ package com.plusgallery.extension
 import com.plusgallery.extension.model.Session
 import com.plusgallery.extension.model.SortType
 import com.plusgallery.extension.service.RequestHandler
+import com.plusgallery.extension.ui.LoginDialog
 
 /**
  * Interface that should be implemented as an object
@@ -16,6 +17,9 @@ import com.plusgallery.extension.service.RequestHandler
  */
 interface BaseInterface {
     val sortArray: Array<SortType>
-    val newSession: Session
-    val newRequestHandler: RequestHandler
+
+    val session: Class<Session>
+    val requestHandler: Class<RequestHandler>
+
+    val loginDialog: Class<LoginDialog>
 }

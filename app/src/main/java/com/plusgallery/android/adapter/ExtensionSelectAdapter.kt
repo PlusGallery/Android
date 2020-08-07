@@ -1,16 +1,15 @@
 package com.plusgallery.android.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.plusgallery.android.R
 import com.plusgallery.android.extension.StoredExtension
-import com.plusgallery.android.view.ExtensionsDialog
+import com.plusgallery.android.view.ExtensionSelectDialog
 import kotlinx.android.synthetic.main.item_extension_dialog.view.*
 
-class ExtensionSelectAdapter(var array: Array<StoredExtension>, private val dialog: ExtensionsDialog)
+class ExtensionSelectAdapter(var array: Array<StoredExtension>, private val dialog: ExtensionSelectDialog)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ExtensionHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -16,7 +16,7 @@ import com.plusgallery.android.adapter.OnItemAction
 import com.plusgallery.android.extension.StoredExtension
 import kotlinx.android.synthetic.main.fragment_dialog_select.*
 
-class ExtensionsDialog: DialogFragment(), OnItemAction {
+class ExtensionSelectDialog: DialogFragment(), OnItemAction {
     interface OnNewAction {
         fun onExtensionSelect(index: Int, text: String?, extension: StoredExtension)
     }
@@ -29,8 +29,8 @@ class ExtensionsDialog: DialogFragment(), OnItemAction {
     private var search: String? = null
 
     companion object {
-        fun new(manager: FragmentManager, exts: Array<StoredExtension>): ExtensionsDialog {
-            val instance = ExtensionsDialog()
+        fun new(manager: FragmentManager, exts: Array<StoredExtension>): ExtensionSelectDialog {
+            val instance = ExtensionSelectDialog()
             instance.manager = manager
             instance.extensions = exts
             return instance
@@ -55,7 +55,7 @@ class ExtensionsDialog: DialogFragment(), OnItemAction {
         exitFab.setOnClickListener { dismiss() }
     }
 
-    fun setOnExtensionSelect(call: ExtensionsDialog.OnNewAction) {
+    fun setOnExtensionSelect(call: ExtensionSelectDialog.OnNewAction) {
         callback = call
     }
 

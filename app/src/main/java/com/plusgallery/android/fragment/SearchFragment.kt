@@ -17,7 +17,7 @@ import com.plusgallery.android.adapter.TabPagerAdapter
 import com.plusgallery.android.extension.StoredExtension
 import com.plusgallery.android.page.PageData
 import com.plusgallery.android.page.SearchPage
-import com.plusgallery.android.view.ExtensionsDialog
+import com.plusgallery.android.view.ExtensionSelectDialog
 import com.plusgallery.android.view.IconPopupMenu
 import com.plusgallery.android.view.SearchBar
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.include_search_fragment.*
 
 
 class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongClickListener,
-    View.OnClickListener, PopupMenu.OnMenuItemClickListener, ExtensionsDialog.OnNewAction,
+    View.OnClickListener, PopupMenu.OnMenuItemClickListener, ExtensionSelectDialog.OnNewAction,
     TabLayoutMediator.TabConfigurationStrategy {
     private lateinit var app: GApplication
     lateinit var adapter: TabPagerAdapter
@@ -87,7 +87,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
         searchBar.closeSearch()
         val selected = tabLayout.selectedTabPosition
         if (selected < 0) {
-            val selectDialog = ExtensionsDialog.new(requireActivity().supportFragmentManager,
+            val selectDialog = ExtensionSelectDialog.new(requireActivity().supportFragmentManager,
                 app.extensions.storedArray())
             selectDialog.setOnExtensionSelect(this)
             selectDialog.show(-1, text.toString())
@@ -136,7 +136,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
     override fun onClick(v: View) {
         if (searchBar.isSearchOpened())
             searchBar.closeSearch()
-        val selectDialog = ExtensionsDialog.new(requireActivity().supportFragmentManager,
+        val selectDialog = ExtensionSelectDialog.new(requireActivity().supportFragmentManager,
             app.extensions.storedArray())
         selectDialog.setOnExtensionSelect(this)
         selectDialog.show()

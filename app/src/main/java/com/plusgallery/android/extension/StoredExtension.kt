@@ -26,6 +26,9 @@ class StoredExtension {
 
             val pkg = manager.getPackageArchiveInfo(path, PackageManager.GET_META_DATA
                     or PackageManager.GET_ACTIVITIES) ?: return null
+            // Workaround issue https://issuetracker.google.com/issues/36918514
+            pkg.applicationInfo.sourceDir = path
+            pkg.applicationInfo.publicSourceDir = path
             extension.pkgInfo = pkg
 
             val basePath = pkg.applicationInfo.metaData.getString(BaseInterface::class.simpleName)

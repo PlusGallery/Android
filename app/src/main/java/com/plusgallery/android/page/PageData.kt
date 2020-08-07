@@ -20,7 +20,7 @@ sealed class PageData {
 
 class SearchPage(val extension: StoredExtension, session: Session): PageData(), WebRequest {
     // Page parameters
-    private val handler = extension.baseClass.newRequestHandler
+    private val handler = extension.baseClass.requestHandler.newInstance()
     val sortArray = extension.baseClass.sortArray
     val submissions: ArrayList<Submission> = ArrayList()
     var selectedPos: Int = 0

@@ -143,7 +143,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
     }
 
     override fun onExtensionSelect(index: Int, text: String?, extension: StoredExtension) {
-        val page = SearchPage(extension, extension.baseClass.newSession)
+        val page = SearchPage(extension, extension.baseClass.session.newInstance())
         val position = appendNewPage(index, page, true)
         if (text != null) {
             page.searchRequest(text)

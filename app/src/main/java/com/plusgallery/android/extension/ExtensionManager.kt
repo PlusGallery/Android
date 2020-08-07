@@ -87,7 +87,7 @@ class ExtensionManager(private val context: Context) {
             remoteMap[extension.packageName] = extension.remote
         // Delete stored link and file
         storedMap.remove(extension.packageName)
-        File(extension.filePath).delete()
+        File(context.cacheDir, extension.packageName).delete()
     }
 
     fun install(extension: RemoteExtension, invoker: (success: Boolean) -> Unit) {

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.plusgallery.android.GlideApp
 import com.plusgallery.android.R
 import com.plusgallery.android.extension.RemoteExtension
 import com.plusgallery.android.extension.StoredExtension
@@ -17,7 +17,7 @@ class ExtensionAdapter<T>(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     @Suppress("UNCHECKED_CAST")
     var array: Array<T> = arrayOfNulls<Any?>(0) as Array<T>
-    val glide = Glide.with(context)
+    val glide = GlideApp.with(context)
 
     inner class ExtensionHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(position: Int) {

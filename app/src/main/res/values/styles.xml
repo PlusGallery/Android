@@ -20,6 +20,14 @@
         <item name="colorOnSurface">@color/colorOnSurface</item>
     </style>
 
+    <!-- Fullscreen application theme. -->
+    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/black_overlay</item>
+        <item name="colorPrimaryDark">@color/black_overlay</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
     <!-- Custom components style for themes -->
     <style name="Widget.MaterialComponents.TabLayout.Icon" parent="Widget.MaterialComponents.TabLayout.Colored">
         <item name="tabIconTint">@null</item>

@@ -2,6 +2,7 @@ package com.plusgallery.android.fragment
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +14,10 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.plusgallery.android.FullscreenActivity
 import com.plusgallery.android.GApplication
 import com.plusgallery.android.R
+import com.plusgallery.android.util.Animate
 import com.plusgallery.android.view.SearchBar
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.include_search_fragment.*
@@ -38,7 +41,11 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnClickLi
             else { controlFab.hide() }
         })
         // Initialize fab controls
-        controlFab.setOnClickListener(this)
+        //controlFab.setOnClickListener(this)
+        controlFab.setOnClickListener {
+            val intent = Intent(context, FullscreenActivity::class.java)
+            startActivity(intent, Animate.custom(requireContext(), R.anim.fade_in, 0))
+        }
 
         // Initialize tabLayout
         /*adapter = TabPagerAdapter(app.pages, childFragmentManager, lifecycle)

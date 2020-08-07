@@ -1,7 +1,7 @@
 <resources>
     <!-- Launcher application theme. -->
     <style name="AppTheme.Launcher" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowBackground">@drawable/ic_banner_screen</item>
     </style>
 
     <!-- Base application theme. -->
@@ -10,6 +10,7 @@
         <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
         <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
         <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/colorPrimaryFriendly</item>
@@ -21,11 +22,20 @@
     </style>
 
     <!-- Fullscreen application theme. -->
-    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">#44000000</item>
+
         <item name="colorPrimary">@color/black_overlay</item>
         <item name="colorPrimaryDark">@color/black_overlay</item>
+        <!-- Fix home button color -->
+        <item name="android:textColorSecondary">@color/white</item>
+
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
     </style>
 
     <!-- Custom components style for themes -->

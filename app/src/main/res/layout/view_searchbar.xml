@@ -82,34 +82,20 @@
                     android:visibility="invisible"
                     tools:ignore="ContentDescription" />
 
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/flexLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_gravity="center_vertical"
-                    app:flexWrap="wrap"
-                    app:alignItems="stretch"
-                    app:alignContent="space_around"
-                    app:showDivider="beginning|middle|end">
-
-                    <EditText
-                        android:id="@+id/searchEdit"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:imeOptions="flagNoExtractUi|actionSearch"
-                        android:importantForAutofill="no"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:hint="@string/searchBar_search"
-                        app:layout_flexGrow="1"/>
-
-                </com.google.android.flexbox.FlexboxLayout>
+                <EditText
+                    android:id="@+id/searchEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:imeOptions="flagNoExtractUi|actionSearch"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:hint="@string/searchBar_search"/>
 
                 <ImageView
                     android:id="@+id/clearText"

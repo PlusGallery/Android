@@ -11,8 +11,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.plusgallery.android.fragment.CollectionsFragment
 import com.plusgallery.android.fragment.PreviewFragment
+import com.thefuntasty.hauler.setOnDragDismissedListener
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 
 class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
@@ -28,11 +28,15 @@ class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
+        setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        haulerView.setOnDragDismissedListener {
+            finish() // finish activity when dismissed
+        }
         viewPager.adapter = object :
             FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return PreviewFragment.new(this@FullscreenActivity)
+                return PreviewFragment()
             }
 
             override fun getItemCount(): Int {

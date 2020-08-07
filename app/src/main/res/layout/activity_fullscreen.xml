@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.thefuntasty.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/haulerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
+    android:background="@color/black"
     tools:context=".FullscreenActivity">
 
     <RelativeLayout
@@ -27,12 +29,19 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"/>
+
         <LinearLayout
             android:id="@+id/controlsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="@drawable/gradient_black_bottom"
+            android:background="@drawable/ic_gradient_black"
             android:gravity="end"
             android:orientation="vertical">
 
@@ -92,4 +101,4 @@
         </LinearLayout>
     </FrameLayout>
 
-</FrameLayout>
+</com.thefuntasty.hauler.HaulerView>

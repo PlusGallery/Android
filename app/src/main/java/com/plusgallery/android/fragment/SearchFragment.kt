@@ -54,8 +54,10 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
 
     override fun onNavigationClicked() {
         val page = getSelectedPage()
-        if (page !is SearchPage)
+        if (page !is SearchPage) {
+            onClick(controlFab)
             return
+        }
         safeMode.isChecked = page.isMature
         ownerId.setText(page.ownerId)
         favById.setText(page.favById)

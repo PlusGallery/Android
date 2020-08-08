@@ -2,6 +2,7 @@ package com.plusgallery.android
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -11,11 +12,15 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.plusgallery.android.fragment.PreviewFragment
+import com.plusgallery.android.page.SearchPage
 import com.thefuntasty.hauler.setOnDragDismissedListener
 import kotlinx.android.synthetic.main.activity_fullscreen.*
+import kotlinx.android.synthetic.main.fragment_preview.*
 
-class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
+class FullscreenActivity : AppCompatActivity() {
+    private lateinit var page: SearchPage
     private var mVisible: Boolean = true
 
     private val detector = GestureDetector(baseContext, object : GestureDetector.SimpleOnGestureListener() {
@@ -29,19 +34,34 @@ class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
         setSupportActionBar(toolBar)
+        val position = intent.getIntExtra("page", 0)
+        page = (application as GApplication).pages[position] as SearchPage
         haulerView.setOnDragDismissedListener {
             finish() // finish activity when dismissed
         }
+        // Single click events detection
         viewPager.adapter = object :
-            FragmentStateAdapter(this) {
+            FragmentStateAdapter(this), View.OnTouchListener {
             override fun createFragment(position: Int): Fragment {
-                return PreviewFragment()
+                return PreviewFragment.new(page.submissions[position], this)
             }
 
             override fun getItemCount(): Int {
-                return 5
+                return page.submissions.size
+            }
+
+            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                detector.onTouchEvent(p1)
+                return false
             }
         }
+        viewPager.currentItem = page.selectedPos
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                page.selectedPos = position
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -93,10 +113,5 @@ class FullscreenActivity : AppCompatActivity(), View.OnTouchListener {
                     controlsLayout.alpha = 1F
                 }
             })
-    }
-
-    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-        detector.onTouchEvent(p1)
-        return false
     }
 }

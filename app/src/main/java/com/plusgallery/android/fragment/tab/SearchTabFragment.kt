@@ -2,7 +2,6 @@ package com.plusgallery.android.fragment.tab
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,8 @@ import com.plusgallery.android.adapter.OnItemAction
 import com.plusgallery.android.adapter.SearchAdapter
 import com.plusgallery.android.page.PageData
 import com.plusgallery.android.page.SearchPage
+import com.plusgallery.android.util.Animate
+import com.plusgallery.extension.service.WebRequest
 import kotlinx.android.synthetic.main.fragment_tab_search.*
 
 class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAction,
@@ -76,9 +77,8 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                val position = mLayoutManager.findLastVisibleItemPosition()
-                if (page.submissions.size - position < 6) {
-                    Log.w("Advancing", position.toString())
+                page.selectedPos = mLayoutManager.findFirstCompletelyVisibleItemPosition()
+                if (page.submissions.size - page.selectedPos < WebRequest.limit / 2) {
                     page.advancePage()
                 }
             }
@@ -87,6 +87,13 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         // Check first search
         if (!page.isSearching)
             onSearchComplete()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (page.selectedPos !in mLayoutManager.findFirstVisibleItemPosition()
+            ..mLayoutManager.findLastVisibleItemPosition())
+            mLayoutManager.scrollToPosition(page.selectedPos)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -121,11 +128,11 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         page.searchRequest()
     }
 
-    override fun onItemPress(position: Any?, view: View) {
-        /*page.selectedPos = position
+    override fun onItemPress(item: Any?, view: View) {
+        page.selectedPos = item as Int
         val intent = Intent(activity, FullscreenActivity::class.java)
         intent.putExtra("page", app.pages.indexOf(page))
-        startActivity(intent, activityCircularReveal(view))*/
+        startActivity(intent, Animate.clipReveal(view))
     }
 
     fun onNewSearchBegin() {

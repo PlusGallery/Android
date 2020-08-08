@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.plusgallery.android.util.Animate
 import com.plusgallery.android.util.Threading
+import com.plusgallery.extension.ui.UIContextWrapper
 import kotlinx.android.synthetic.main.activity_launcher.*
 
 
@@ -19,7 +20,11 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun initialize() {
         (application as GApplication).extensions.fetchStored()
-        (application as GApplication).extensions.fetchRemote {
+        val ext = (application as GApplication).extensions.storedArray()[0]
+
+        val ctx = UIContextWrapper(this, ext.getResources(this))
+        ext.baseClass.loginDialog.newInstance().show(supportFragmentManager, ctx)
+        /*(application as GApplication).extensions.fetchRemote {
             Threading.sync {
                 if (!it) {
                     Toast.makeText(this, getString(R.string.launcher_error),
@@ -28,6 +33,6 @@ class LauncherActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent, Animate.custom(this, R.anim.fade_in, 0))
             }
-        }
+        }*/
     }
 }

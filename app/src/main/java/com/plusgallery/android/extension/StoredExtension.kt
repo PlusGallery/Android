@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import com.plusgallery.extension.BaseInterface
 import dalvik.system.PathClassLoader
 
@@ -43,6 +44,22 @@ class StoredExtension {
 
     fun hasRemote(): Boolean {
         return this::remote.isInitialized
+    }
+
+    fun getAppLabel(context: Context): CharSequence? {
+        return getString(context, label)
+    }
+
+    fun getAppIcon(context: Context): Drawable? {
+        return getDrawable(context, icon)
+    }
+
+    fun getString(context: Context, res: Int): CharSequence? {
+        return context.packageManager.getText(packageName, res, pkgInfo.applicationInfo)
+    }
+
+    fun getDrawable(context: Context, res: Int): Drawable? {
+        return context.packageManager.getDrawable(packageName, res, pkgInfo.applicationInfo)
     }
 
     fun getResources(context: Context): Resources {

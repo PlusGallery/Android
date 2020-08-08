@@ -58,7 +58,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         page.sortArray.forEachIndexed { i, it ->
             val tab = sortLayout.newTab()
             tab.text = it.text()
-            tab.icon = page.extension.getResources(requireContext()).getDrawable(it.resId(), null)
+            tab.icon = page.extension.getDrawable(requireContext(), it.resId())
             tab.view.isClickable = false
             sortLayout.addTab(tab)
             if (page.sortType == page.sortArray[i])

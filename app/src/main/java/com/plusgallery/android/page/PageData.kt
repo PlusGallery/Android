@@ -13,7 +13,7 @@ import com.plusgallery.extension.service.WebResponse
 
 sealed class PageData {
     abstract fun title(): String
-    abstract fun icon(context: Context): Drawable
+    abstract fun icon(context: Context): Drawable?
     abstract fun copy(): PageData
     abstract fun close()
 }
@@ -46,9 +46,8 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
         return parameters
     }
 
-    override fun icon(context: Context): Drawable {
-        return extension.getResources(context)
-            .getDrawable(extension.icon, null)
+    override fun icon(context: Context): Drawable? {
+        return extension.getAppIcon(context)
     }
 
     override fun copy(): PageData {
@@ -102,7 +101,7 @@ class DetailsPage: PageData() {
         TODO("Not yet implemented")
     }
 
-    override fun icon(context: Context): Drawable {
+    override fun icon(context: Context): Drawable? {
         TODO("Not yet implemented")
     }
 

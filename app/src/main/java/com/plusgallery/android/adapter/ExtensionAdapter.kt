@@ -35,10 +35,9 @@ class ExtensionAdapter<T>(
                 }
                 is StoredExtension -> {
                     itemView.title.text = "Installed"
-                    val res = item.getResources(context)
-                    //itemView.name.text = res.getString(item.label)
+                    itemView.name.text = item.getAppLabel(context)
                     itemView.packageName.text = item.packageName
-                    glide.load(res.getDrawable(item.icon, null))
+                    glide.load(item.getAppIcon(context))
                         .placeholder(R.drawable.ic_baseline_error_24)
                         .into(itemView.icon)
                 }

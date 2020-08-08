@@ -15,9 +15,9 @@ class ExtensionSelectAdapter(var array: Array<StoredExtension>, private val dial
     inner class ExtensionHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(position: Int) {
             val item = array[position]
-            val resource = item.getResources(dialog.requireContext())
-            itemView.name.text = resource.getText(item.label)
-            itemView.icon.setImageDrawable(resource.getDrawable(item.icon, null))
+            val context = dialog.requireContext()
+            itemView.name.text = item.getAppLabel(context)
+            itemView.icon.setImageDrawable(item.getAppIcon(context))
 
             itemView.linearLayout.setOnClickListener {
                 dialog.onItemPress(position, itemView.linearLayout)

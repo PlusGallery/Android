@@ -3,7 +3,6 @@ package com.plusgallery.android.page
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.plusgallery.android.extension.StoredExtension
-import com.plusgallery.android.fragment.tab.SearchTabFragment
 import com.plusgallery.android.util.Threading
 import com.plusgallery.extension.model.Session
 import com.plusgallery.extension.model.SortType
@@ -18,13 +17,20 @@ sealed class PageData {
     abstract fun close()
 }
 
+interface SearchPageAction {
+    fun onNewSearchBegin() {}
+    fun onSearchComplete() {}
+    fun onSearchAdvance()
+    fun onSearchAdvanceComplete(from: Int, to: Int)
+}
+
 class SearchPage(val extension: StoredExtension, session: Session): PageData(), WebRequest {
     // Page parameters
     private val handler = extension.baseClass.requestHandler.newInstance()
     val sortArray = extension.baseClass.sortArray
     val submissions: ArrayList<Submission> = ArrayList()
     var selectedPos: Int = 0
-    var fragment: SearchTabFragment? = null
+    var searchAction: SearchPageAction? = null
     var isSearching: Boolean = false
     // WebRequest parameters
     override var page: Int = 1
@@ -56,14 +62,18 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
 
     override fun close() {
         handler.release()
-        fragment = null
+        searchAction = null
+    }
+
+    fun setSearchPageAction(call: SearchPageAction?) {
+        searchAction = call
     }
 
     fun searchRequest(value: String? = null) {
         if (value != null)
             parameters = value
         isSearching = true
-        fragment?.onNewSearchBegin()
+        searchAction?.onNewSearchBegin()
         handler.search(this) {
             Threading.sync {
                 if (it.responseCode() != WebResponse.Code.SUCCESS)
@@ -71,17 +81,18 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
                 submissions.addAll(it.submissions())
                 // Block with a false search when end reached
                 isSearching = it.endReached()
-                fragment?.onSearchComplete()
+                searchAction?.onSearchComplete()
             }
         }
     }
 
-    fun advancePage() {
-        if (isSearching)
-            return
+    fun tryAdvanceSearch() {
+        if (submissions.size - selectedPos > WebRequest.limit / 2
+            || isSearching)
+            return // Return if working or too many unseen submissions
         page++
         isSearching = true
-        fragment?.onSearchAdvance()
+        searchAction?.onSearchAdvance()
         handler.search(this) {
             Threading.sync {
                 if (it.responseCode() != WebResponse.Code.SUCCESS)
@@ -90,7 +101,7 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
                 submissions.addAll(it.submissions())
                 // Block with a false search when end reached
                 isSearching = it.endReached()
-                fragment?.onSearchAdvanceComplete(size, submissions.size - 1)
+                searchAction?.onSearchAdvanceComplete(size, submissions.size - 1)
             }
         }
     }

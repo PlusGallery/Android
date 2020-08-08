@@ -17,12 +17,12 @@ import com.plusgallery.android.adapter.OnItemAction
 import com.plusgallery.android.adapter.SearchAdapter
 import com.plusgallery.android.page.PageData
 import com.plusgallery.android.page.SearchPage
+import com.plusgallery.android.page.SearchPageAction
 import com.plusgallery.android.util.Animate
-import com.plusgallery.extension.service.WebRequest
 import kotlinx.android.synthetic.main.fragment_tab_search.*
 
 class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAction,
-    CompoundButton.OnCheckedChangeListener {
+    CompoundButton.OnCheckedChangeListener, SearchPageAction {
     private lateinit var app: GApplication
     private lateinit var page: SearchPage
     private lateinit var mAdapter: SearchAdapter
@@ -52,7 +52,6 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        page.fragment = this
         // Populate sort layout with tabs
         sortSwitch.isChecked = page.sortAsc
         sortSwitch.setOnCheckedChangeListener(this)
@@ -78,9 +77,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 page.selectedPos = mLayoutManager.findFirstCompletelyVisibleItemPosition()
-                if (page.submissions.size - page.selectedPos < WebRequest.limit / 2) {
-                    page.advancePage()
-                }
+                page.tryAdvanceSearch()
             }
         })
 
@@ -91,6 +88,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
 
     override fun onResume() {
         super.onResume()
+        page.setSearchPageAction(this)
         if (page.selectedPos !in mLayoutManager.findFirstVisibleItemPosition()
             ..mLayoutManager.findLastVisibleItemPosition())
             mLayoutManager.scrollToPosition(page.selectedPos)
@@ -105,7 +103,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         // In case of fragment being deleted
         // remove it's reference from the page
         if (this::page.isInitialized)
-            page.fragment = null
+            page.setSearchPageAction(null)
         super.onDestroy()
     }
 
@@ -135,26 +133,26 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         startActivity(intent, Animate.clipReveal(view))
     }
 
-    fun onNewSearchBegin() {
+    override fun onNewSearchBegin() {
         page.submissions.clear()
         mAdapter.notifyDataSetChanged()
         onSearchAdvance()
     }
 
-    fun onSearchAdvance() {
+    override fun onSearchAdvance() {
         sortSwitch.isEnabled = false
         enableTabs(false)
         swipeRefreshLayout.isRefreshing = true
     }
 
-    fun onSearchComplete() {
+    override fun onSearchComplete() {
         mAdapter.notifyDataSetChanged()
         sortSwitch.isEnabled = true
         enableTabs(true)
         swipeRefreshLayout.isRefreshing = false
     }
 
-    fun onSearchAdvanceComplete(from: Int, to: Int) {
+    override fun onSearchAdvanceComplete(from: Int, to: Int) {
         mAdapter.notifyItemRangeInserted(from, to)
         sortSwitch.isEnabled = true
         enableTabs(true)

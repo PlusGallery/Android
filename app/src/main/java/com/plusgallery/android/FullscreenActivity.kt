@@ -15,11 +15,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.plusgallery.android.fragment.PreviewFragment
 import com.plusgallery.android.page.SearchPage
+import com.plusgallery.android.page.SearchPageAction
 import com.thefuntasty.hauler.setOnDragDismissedListener
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 import kotlinx.android.synthetic.main.fragment_preview.*
+import kotlinx.android.synthetic.main.fragment_tab_search.*
 
-class FullscreenActivity : AppCompatActivity() {
+class FullscreenActivity : AppCompatActivity(), SearchPageAction {
     private lateinit var page: SearchPage
     private var mVisible: Boolean = true
 
@@ -36,6 +38,7 @@ class FullscreenActivity : AppCompatActivity() {
         setSupportActionBar(toolBar)
         val position = intent.getIntExtra("page", 0)
         page = (application as GApplication).pages[position] as SearchPage
+        page.setSearchPageAction(this)
         haulerView.setOnDragDismissedListener {
             finish() // finish activity when dismissed
         }
@@ -55,11 +58,15 @@ class FullscreenActivity : AppCompatActivity() {
                 return false
             }
         }
-        viewPager.currentItem = page.selectedPos
+        viewPager.setCurrentItem(page.selectedPos, false)
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 page.selectedPos = position
+                val submission = page.submissions[position]
+                title = submission.title()
+                toolBar.subtitle = submission.author()
+                page.tryAdvanceSearch()
             }
         })
     }
@@ -113,5 +120,14 @@ class FullscreenActivity : AppCompatActivity() {
                     controlsLayout.alpha = 1F
                 }
             })
+    }
+
+    override fun onSearchAdvance() {
+        refreshLayout.visibility = View.VISIBLE
+    }
+
+    override fun onSearchAdvanceComplete(from: Int, to: Int) {
+        viewPager.adapter?.notifyItemRangeInserted(from, to)
+        refreshLayout.visibility = View.GONE
     }
 }

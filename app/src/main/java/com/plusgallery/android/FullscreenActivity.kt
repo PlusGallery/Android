@@ -37,6 +37,7 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
                 val submission = page.submissions[position]
                 toolBar.title = submission.title()
                 toolBar.subtitle = submission.author()
+                textFavs.text = submission.favourites().toString()
                 page.tryAdvanceSearch()
             }
         })

@@ -20,11 +20,7 @@ class LauncherActivity : AppCompatActivity() {
 
     private fun initialize() {
         (application as GApplication).extensions.fetchStored()
-        val ext = (application as GApplication).extensions.storedArray()[0]
-
-        val ctx = UIContextWrapper(this, ext.getResources(this))
-        ext.baseClass.loginDialog.newInstance().show(supportFragmentManager, ctx)
-        /*(application as GApplication).extensions.fetchRemote {
+        (application as GApplication).extensions.fetchRemote {
             Threading.sync {
                 if (!it) {
                     Toast.makeText(this, getString(R.string.launcher_error),
@@ -33,6 +29,6 @@ class LauncherActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent, Animate.custom(this, R.anim.fade_in, 0))
             }
-        }*/
+        }
     }
 }

@@ -55,6 +55,14 @@ class ExtensionManager(private val context: Context) {
         }
     }
 
+    fun append(extension: StoredExtension) {
+        storedMap[extension.packageName] = extension
+    }
+
+    fun retrieve(packageName: String): StoredExtension? {
+        return storedMap[packageName]
+    }
+
     fun update(extension: StoredExtension, invoker: (success: Boolean) -> Unit) {
         // Delete stored link and file
         val file = File(context.cacheDir, extension.packageName)

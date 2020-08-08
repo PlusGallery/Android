@@ -27,18 +27,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:key="accounts"
         app:title="Accounts">
-
-        <Preference
-            app:key="e621"
-            app:title="e621"
-            app:icon="@drawable/ic_baseline_person_24"
-            app:summary="Enter your account data here"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
         app:title="About">
+
+        <Preference
+            app:key="extLoad"
+            app:title="Local extension"
+            app:icon="@drawable/ic_baseline_add_24"
+            app:summary="Import a local extension for this session"/>
 
         <Preference
             app:key="version"

@@ -23,8 +23,6 @@ open class BaseDialog: DialogFragment() {
 
     fun show(manager: FragmentManager, context: Context) {
         mContext = context
-        val transaction = manager.beginTransaction()
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.add(Window.ID_ANDROID_CONTENT, this).addToBackStack(null).commit()
+        show(manager, this::class.simpleName)
     }
 }

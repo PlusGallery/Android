@@ -29,6 +29,12 @@ interface Submission {
      */
     fun isAdult(): Boolean
     /**
+     * Return the amount of favourites
+     *
+     * @return A generic int
+     */
+    fun favourites(): Int
+    /**
      * Return post date.
      *
      * @return An initialized Date
@@ -61,6 +67,12 @@ interface Submission {
      * @return An array of strings
      */
     fun pools(): Array<Int>
+    /**
+     * Return an array of tags
+     *
+     * @return An array of strings
+     */
+    fun tags(): Array<String>
     /**
      * Return the user name.
      * -May be used as UI element-

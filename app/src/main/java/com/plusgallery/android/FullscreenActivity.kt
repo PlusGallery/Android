@@ -7,10 +7,9 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
-import com.plusgallery.android.fragment.PreviewFragment
+import com.plusgallery.android.adapter.SubmissionAdapter
 import com.plusgallery.android.page.SearchPage
 import com.plusgallery.android.page.SearchPageAction
 import com.thefuntasty.hauler.setOnDragDismissedListener
@@ -27,20 +26,9 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         val position = intent.getIntExtra("page", 0)
         page = (application as GApplication).pages[position] as SearchPage
         page.setSearchPageAction(this)
-        haulerView.setOnDragDismissedListener {
-            finish() // finish activity when dismissed
-        }
+        haulerView.setOnDragDismissedListener { finish() }
         // Single click events detection
-        viewPager.adapter = object :
-            FragmentStateAdapter(this) {
-            override fun createFragment(position: Int): Fragment {
-                return PreviewFragment.new(page.submissions[position])
-            }
-
-            override fun getItemCount(): Int {
-                return page.submissions.size
-            }
-        }
+        viewPager.adapter = SubmissionAdapter(this, page)
         viewPager.setCurrentItem(page.selectedPos, false)
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -49,7 +37,6 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
                 val submission = page.submissions[position]
                 toolBar.title = submission.title()
                 toolBar.subtitle = submission.author()
-                setContentType(0)
                 page.tryAdvanceSearch()
             }
         })

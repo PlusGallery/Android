@@ -28,8 +28,6 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".FullscreenActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Fullscreen"/>
     </application>
 

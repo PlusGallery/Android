@@ -2,14 +2,11 @@ package com.plusgallery.android
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -18,19 +15,10 @@ import com.plusgallery.android.page.SearchPage
 import com.plusgallery.android.page.SearchPageAction
 import com.thefuntasty.hauler.setOnDragDismissedListener
 import kotlinx.android.synthetic.main.activity_fullscreen.*
-import kotlinx.android.synthetic.main.fragment_preview.*
-import kotlinx.android.synthetic.main.fragment_tab_search.*
 
 class FullscreenActivity : AppCompatActivity(), SearchPageAction {
     private lateinit var page: SearchPage
-    private var mVisible: Boolean = true
-
-    private val detector = GestureDetector(baseContext, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-            if (mVisible) hide() else show()
-            return true
-        }
-    })
+    var mVisible: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,18 +32,13 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         }
         // Single click events detection
         viewPager.adapter = object :
-            FragmentStateAdapter(this), View.OnTouchListener {
+            FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return PreviewFragment.new(page.submissions[position], this)
+                return PreviewFragment.new(page.submissions[position])
             }
 
             override fun getItemCount(): Int {
                 return page.submissions.size
-            }
-
-            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-                detector.onTouchEvent(p1)
-                return false
             }
         }
         viewPager.setCurrentItem(page.selectedPos, false)
@@ -64,8 +47,9 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
                 super.onPageSelected(position)
                 page.selectedPos = position
                 val submission = page.submissions[position]
-                title = submission.title()
+                toolBar.title = submission.title()
                 toolBar.subtitle = submission.author()
+                setContentType(0)
                 page.tryAdvanceSearch()
             }
         })
@@ -81,7 +65,26 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         }
     }
 
-    private fun hide() {
+    fun setContentType(type: Int) {
+        when (type) {
+            0 -> {
+                progressBar.visibility = VISIBLE
+                contentType.visibility = GONE
+            }
+            1 -> {
+                progressBar.visibility = GONE
+                contentType.visibility = VISIBLE
+                contentType.setImageResource(R.drawable.ic_baseline_image_24)
+            }
+            2 -> {
+                progressBar.visibility = GONE
+                contentType.visibility = VISIBLE
+                contentType.setImageResource(R.drawable.ic_baseline_video_24)
+            }
+        }
+    }
+
+    fun hide() {
         mVisible = false
         // Hide UI first
         supportActionBar?.hide()
@@ -103,7 +106,7 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
 
-    private fun show() {
+    fun show() {
         mVisible = true
         // Show the system bar
         fullscreen_content.systemUiVisibility =
@@ -123,11 +126,11 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
     }
 
     override fun onSearchAdvance() {
-        refreshLayout.visibility = View.VISIBLE
+        refreshLayout.visibility = VISIBLE
     }
 
     override fun onSearchAdvanceComplete(from: Int, to: Int) {
         viewPager.adapter?.notifyItemRangeInserted(from, to)
-        refreshLayout.visibility = View.GONE
+        refreshLayout.visibility = GONE
     }
 }

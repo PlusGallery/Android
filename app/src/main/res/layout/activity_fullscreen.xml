@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     app:dragUpEnabled="true"
+    tools:backgroundTint="@color/colorStroke"
     tools:context=".FullscreenActivity">
 
     <RelativeLayout
@@ -39,7 +40,7 @@
                 android:id="@+id/toolBar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@drawable/ic_gradient_black"
+                android:background="@drawable/ic_gradient_i_black"
                 app:navigationIcon="?homeAsUpIndicator"
                 app:title="@string/placeholder_title"
                 app:subtitle="@string/placeholder_subtitle"

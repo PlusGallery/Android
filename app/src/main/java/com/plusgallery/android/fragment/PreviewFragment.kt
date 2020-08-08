@@ -1,5 +1,6 @@
 package com.plusgallery.android.fragment
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
@@ -9,20 +10,26 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.plusgallery.android.FullscreenActivity
 import com.plusgallery.android.GlideApp
 import com.plusgallery.android.R
 import com.plusgallery.extension.model.Submission
 import kotlinx.android.synthetic.main.fragment_preview.*
 
-class PreviewFragment : Fragment() {
+class PreviewFragment : Fragment(), View.OnTouchListener {
     private lateinit var submission: Submission
-    private lateinit var touchListener: View.OnTouchListener
+    private lateinit var parent: FullscreenActivity
+    private val detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
+            if (parent.mVisible) parent.hide() else parent.show()
+            return true
+        }
+    })
 
     companion object {
-        fun new(sub: Submission, listener: View.OnTouchListener): PreviewFragment {
+        fun new(sub: Submission): PreviewFragment {
             val fragment = PreviewFragment()
             fragment.submission = sub
-            fragment.touchListener = listener
             return fragment
         }
     }
@@ -33,16 +40,17 @@ class PreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        imageView.setOnTouchListener(touchListener)
+        parent = activity as FullscreenActivity
+        imageView.setOnTouchListener(this)
+        imageView.isZoomable = false
+        imageView.isTranslatable = false
         val glide = GlideApp.with(this)
         glide.load(submission.file())
             .thumbnail(glide.load(submission.thumbnail()))
             .transition(DrawableTransitionOptions.withCrossFade())
             .listener(object : RequestListener<Drawable> {
                 override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    /*progressBar.visibility = GONE
-                    contentType.visibility = VISIBLE
-                    contentType.setImageResource(R.drawable.ic_image_white_24dp)*/
+                    parent.setContentType(1)
                     imageView.isZoomable = true
                     imageView.isTranslatable = true
                     return false
@@ -54,5 +62,11 @@ class PreviewFragment : Fragment() {
                 }
             })
             .into(imageView)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+        detector.onTouchEvent(p1)
+        return false
     }
 }

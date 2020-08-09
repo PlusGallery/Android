@@ -7,7 +7,8 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
+import androidx.core.view.get
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.plusgallery.android.adapter.SubmissionAdapter
 import com.plusgallery.android.page.SearchPage
@@ -29,15 +30,26 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         haulerView.setOnDragDismissedListener { finish() }
         // Single click events detection
         viewPager.adapter = SubmissionAdapter(this, page)
+        // Setup visible index
         viewPager.setCurrentItem(page.selectedPos, false)
+        // Setup on page change updater
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                val prevPosition = page.selectedPos
                 page.selectedPos = position
                 val submission = page.submissions[position]
                 toolBar.title = submission.title()
                 toolBar.subtitle = submission.author()
                 textFavs.text = submission.favourites().toString()
+
+                val recycler = viewPager[0] as RecyclerView
+                if (prevPosition != position) {
+                    val prevHolder = recycler.findViewHolderForAdapterPosition(prevPosition) as SubmissionAdapter.PreviewHolder
+                    prevHolder.unloadView(prevPosition)
+                }
+                val holder = recycler.findViewHolderForAdapterPosition(position) as SubmissionAdapter.PreviewHolder
+                holder.loadView(position)
                 page.tryAdvanceSearch()
             }
         })
@@ -53,7 +65,9 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         }
     }
 
-    fun setContentType(type: Int) {
+    fun setContentType(pos: Int, type: Int) {
+        if (pos != page.selectedPos)
+            return
         when (type) {
             0 -> {
                 progressBar.visibility = VISIBLE

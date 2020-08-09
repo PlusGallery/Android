@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">+Gallery</string>
+    <string name="report_title">Oh no!</string>
+    <string name="report_text">  Something went wrong and the app crashed.\n  It would be great if you\'d send it to the developers!</string>
     <string name="launcher_error">Error, unable to fetch remote repository</string>
     <string name="title_search">Search</string>
     <string name="title_collections">Collections</string>

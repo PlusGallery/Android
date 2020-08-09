@@ -21,12 +21,12 @@ import com.plusgallery.android.FullscreenActivity
 import com.plusgallery.android.GlideApp
 import com.plusgallery.android.R
 import com.plusgallery.android.page.SearchPage
+import com.plusgallery.extension.model.Submission
 import kotlinx.android.synthetic.main.item_preview.view.*
 import java.net.URLConnection
 
 class SubmissionAdapter(private var parent: FullscreenActivity, private var page: SearchPage) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var visibleIndex: Int = -1
-    val glide = GlideApp.with(parent)
+    private val glide = GlideApp.with(parent)
 
     private val detector = GestureDetector(parent, object : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
@@ -36,74 +36,90 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
     })
 
     inner class PreviewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        lateinit var submission: Submission
         var preview: Bitmap? = null
+        var largeTarget: Target<*>? = null
+        var thumbTarget = object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                preview = resource
+                // In case of submission not being selected one
+                if (largeTarget == null)
+                    itemView.imageView.setImageBitmap(preview!!)
+            }
+            override fun onLoadCleared(placeholder: Drawable?) {
+                preview = null
+            }
+        }
+
+    val onObjectReady = object : RequestListener<Drawable> {
+        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                                     dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            parent.setContentType(R.drawable.ic_baseline_image_24)
+            itemView.imageView.isZoomable = true
+            itemView.imageView.isTranslatable = true
+            return false // allow Glide's request to update target
+        }
+
+        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+            parent.setContentType(R.drawable.ic_baseline_image_24)
+            itemView.imageView.setImageResource(R.drawable.ic_baseline_error_24)
+            return true
+        }
+    }
 
         @SuppressLint("ClickableViewAccessibility")
         fun bindView(position: Int) {
-            val submission = page.submissions[position]
+            submission = page.submissions[position]
+
             itemView.imageView.isZoomable = false
             itemView.imageView.isTranslatable = false
-            preview = null
-            glide.asBitmap()
-                .load(submission.thumbnail())
-                .error(R.drawable.ic_baseline_error_24)
-                .into(object : CustomTarget<Bitmap>(){
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    preview = resource
-                    if (visibleIndex != position)
-                        itemView.imageView.setImageBitmap(preview!!)
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    preview = null
-                }
-            })
+            itemView.imageView.setImageResource(0)
+            glide.clear(thumbTarget)
+            glide.asBitmap().load(submission.thumbnail())
+                .into(thumbTarget)
             itemView.imageView.setOnTouchListener { _, event ->
                 detector.onTouchEvent(event)
                 false
             }
         }
 
-        fun unloadView(position: Int) {
-            if (position !in 0..page.submissions.size)
-                return
+        fun unloadView() {
+            glide.clear(largeTarget)
+            largeTarget = null
+
+            itemView.videoView.stopPlayback()
+            itemView.videoView.visibility = View.GONE
+
+            itemView.imageView.visibility = View.VISIBLE
             itemView.imageView.isZoomable = false
             itemView.imageView.isTranslatable = false
             itemView.imageView.setImageBitmap(preview)
         }
 
-        fun loadView(position: Int) {
-            // Set the currently visible position
-            visibleIndex = position
-            // Handle submission
-            val submission = page.submissions[position]
-            parent.setContentType(position,0)
-            glide.load(submission.preview())
-                .placeholder(BitmapDrawable(parent.resources, preview))
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .skipMemoryCache(true)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        // true if the listener has handled setting the resource on the target,
-                        // false to allow Glide's request to update the target
-                        if (visibleIndex == position) {
-                            parent.setContentType(position,1)
-                            itemView.imageView.isZoomable = true
-                            itemView.imageView.isTranslatable = true
-                            return false
-                        }
-                        return true
-                    }
+        fun loadView() {
+            parent.setContentType(0)
 
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        if (visibleIndex == position) {
-                            parent.setContentType(position,1)
-                        }
-                        itemView.imageView.setImageResource(R.drawable.ic_baseline_error_24)
-                        return true
+            val mime = URLConnection.guessContentTypeFromName(submission.file())
+            when (mime.substringBefore('/')) {
+                "video" -> {
+                    itemView.videoView.visibility = View.VISIBLE
+                    itemView.videoView.setVideoURI(Uri.parse(submission.file()))
+                    itemView.videoView.setOnPreparedListener {
+                        itemView.imageView.visibility = View.GONE
+                        parent.setContentType(R.drawable.ic_baseline_video_24)
+                        it.isLooping = true
+                        itemView.videoView.start()
                     }
-                })
-                .into(itemView.imageView)
+                }
+                "image" -> {
+                    largeTarget = glide.load(submission.preview())
+                        .placeholder(BitmapDrawable(parent.resources, preview))
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE).skipMemoryCache(true)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .listener(onObjectReady).into(itemView.imageView)
+                }
+                else -> parent.setContentType(R.drawable.ic_baseline_file_24)
+            }
         }
     }
 

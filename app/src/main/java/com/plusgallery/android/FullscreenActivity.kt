@@ -20,6 +20,27 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
     private lateinit var page: SearchPage
     var mVisible: Boolean = true
 
+    val onPageChange = object: ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            val prevPosition = page.selectedPos
+            page.selectedPos = position
+            val submission = page.submissions[position]
+            toolBar.title = submission.title()
+            toolBar.subtitle = submission.author()
+            textFavs.text = submission.favourites().toString()
+
+            val recycler = viewPager[0] as RecyclerView
+            if (prevPosition != position) {
+                val prevHolder = recycler.findViewHolderForAdapterPosition(prevPosition) as SubmissionAdapter.PreviewHolder
+                prevHolder.unloadView()
+            }
+            val holder = recycler.findViewHolderForAdapterPosition(position) as SubmissionAdapter.PreviewHolder
+            holder.loadView()
+            page.tryAdvanceSearch()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
@@ -32,27 +53,12 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         viewPager.adapter = SubmissionAdapter(this, page)
         // Setup visible index
         viewPager.setCurrentItem(page.selectedPos, false)
+        // https://stackoverflow.com/questions/16074058/onpageselected-doesnt-work-for-first-page
+        // For some reason it must be declared before the callback or it will be called before
+        // the ViewHolder initialization.
+        viewPager.post{ onPageChange.onPageSelected(page.selectedPos) }
         // Setup on page change updater
-        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                val prevPosition = page.selectedPos
-                page.selectedPos = position
-                val submission = page.submissions[position]
-                toolBar.title = submission.title()
-                toolBar.subtitle = submission.author()
-                textFavs.text = submission.favourites().toString()
-
-                val recycler = viewPager[0] as RecyclerView
-                if (prevPosition != position) {
-                    val prevHolder = recycler.findViewHolderForAdapterPosition(prevPosition) as SubmissionAdapter.PreviewHolder
-                    prevHolder.unloadView(prevPosition)
-                }
-                val holder = recycler.findViewHolderForAdapterPosition(position) as SubmissionAdapter.PreviewHolder
-                holder.loadView(position)
-                page.tryAdvanceSearch()
-            }
-        })
+        viewPager.registerOnPageChangeCallback(onPageChange)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -65,25 +71,15 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         }
     }
 
-    fun setContentType(pos: Int, type: Int) {
-        if (pos != page.selectedPos)
+    fun setContentType(type: Int) {
+        if (type == 0) {
+            progressBar.visibility = VISIBLE
+            contentType.visibility = GONE
             return
-        when (type) {
-            0 -> {
-                progressBar.visibility = VISIBLE
-                contentType.visibility = GONE
-            }
-            1 -> {
-                progressBar.visibility = GONE
-                contentType.visibility = VISIBLE
-                contentType.setImageResource(R.drawable.ic_baseline_image_24)
-            }
-            2 -> {
-                progressBar.visibility = GONE
-                contentType.visibility = VISIBLE
-                contentType.setImageResource(R.drawable.ic_baseline_video_24)
-            }
         }
+        progressBar.visibility = GONE
+        contentType.visibility = VISIBLE
+        contentType.setImageResource(type)
     }
 
     fun hide() {

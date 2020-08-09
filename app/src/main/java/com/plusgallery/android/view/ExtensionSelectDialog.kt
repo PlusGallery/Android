@@ -64,7 +64,7 @@ class ExtensionSelectDialog: DialogFragment(), OnItemAction {
         this.search = search
         val transaction = manager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        transaction.add(Window.ID_ANDROID_CONTENT, this).addToBackStack(null).commit()
+        transaction.add(Window.ID_ANDROID_CONTENT, this)/*.addToBackStack(null)*/.commit()
     }
 
     override fun onItemPress(item: Any?, view: View) {

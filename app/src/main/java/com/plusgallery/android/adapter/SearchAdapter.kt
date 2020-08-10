@@ -12,7 +12,7 @@ import com.plusgallery.extension.model.Submission
 import kotlinx.android.synthetic.main.item_submission.view.*
 
 class SearchAdapter(parent: SearchTabFragment, private var list: List<Submission>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val itemAction: OnItemAction = parent
+    val itemAction: OnItemAction<Int> = parent
     val glide = GlideApp.with(parent)
 
     inner class SearchHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -23,11 +23,8 @@ class SearchAdapter(parent: SearchTabFragment, private var list: List<Submission
             glide.load(item.thumbnail())
                 .error(R.drawable.ic_baseline_search_24)
                 .into(itemView.imageThumb)
-            itemView.verLayout.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    itemAction.onItemPress(position, itemView.imageThumb)
-                }
-                false
+            itemView.verLayout.setOnClickListener {
+                itemAction.onItemPress(position, itemView.imageThumb)
             }
         }
     }

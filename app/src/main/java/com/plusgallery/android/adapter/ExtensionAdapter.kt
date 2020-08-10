@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_extension.view.*
 
 class ExtensionAdapter<T>(
     val context: Context,
-    private val listener: OnItemAction
+    private val listener: OnItemAction<Any?>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     @Suppress("UNCHECKED_CAST")
     var array: Array<T> = arrayOfNulls<Any?>(0) as Array<T>

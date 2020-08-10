@@ -21,7 +21,6 @@ import com.plusgallery.android.page.SearchPage
 import com.plusgallery.android.view.ExtensionSelectDialog
 import com.plusgallery.android.view.IconPopupMenu
 import com.plusgallery.android.view.SearchBar
-import com.plusgallery.extension.ui.UIContextWrapper
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.include_search_fragment.*
 

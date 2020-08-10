@@ -21,7 +21,7 @@ import com.plusgallery.android.page.SearchPageAction
 import com.plusgallery.android.util.Animate
 import kotlinx.android.synthetic.main.fragment_tab_search.*
 
-class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAction,
+class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAction<Int>,
     CompoundButton.OnCheckedChangeListener, SearchPageAction {
     private lateinit var page: SearchPage
     private lateinit var mAdapter: SearchAdapter
@@ -124,8 +124,8 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         page.searchRequest()
     }
 
-    override fun onItemPress(item: Any?, view: View) {
-        page.selectedPos = item as Int
+    override fun onItemPress(item: Int, view: View) {
+        page.selectedPos = item
         val intent = Intent(activity, FullscreenActivity::class.java)
         intent.putExtra("page", GApplication.get.pages.indexOf(page))
         startActivity(intent, Animate.clipReveal(view))

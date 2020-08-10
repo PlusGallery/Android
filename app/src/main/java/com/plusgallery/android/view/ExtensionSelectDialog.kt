@@ -19,7 +19,7 @@ import com.plusgallery.android.extension.StoredExtension
 import kotlinx.android.synthetic.main.fragment_dialog_select.*
 
 
-class ExtensionSelectDialog: DialogFragment(), OnItemAction {
+class ExtensionSelectDialog: DialogFragment(), OnItemAction<StoredExtension> {
     interface OnNewAction {
         fun onExtensionSelect(index: Int, text: String?, extension: StoredExtension)
     }
@@ -59,7 +59,7 @@ class ExtensionSelectDialog: DialogFragment(), OnItemAction {
         exitFab.setOnClickListener { dismiss() }
     }
 
-    override fun dismiss() {
+    override fun dismiss() { //TODO CHECK IF WORTH IT
         val transaction = parentFragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
         transaction.remove(this).commit()
@@ -77,7 +77,7 @@ class ExtensionSelectDialog: DialogFragment(), OnItemAction {
         transaction.add(Window.ID_ANDROID_CONTENT, this).commit()
     }
 
-    override fun onItemPress(item: Any?, view: View) {
+    override fun onItemPress(item: StoredExtension, view: View) {
         dismiss()
         if (this::callback.isInitialized) {
             callback.onExtensionSelect(index, search, item as StoredExtension)

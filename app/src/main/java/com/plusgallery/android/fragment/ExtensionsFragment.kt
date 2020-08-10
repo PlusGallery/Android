@@ -21,7 +21,7 @@ import com.plusgallery.android.util.Threading
 import com.plusgallery.android.view.IconPopupMenu
 import kotlinx.android.synthetic.main.fragment_extensions.*
 
-class ExtensionsFragment : Fragment(), OnItemAction, PopupMenu.OnMenuItemClickListener {
+class ExtensionsFragment : Fragment(), OnItemAction<Any?>, PopupMenu.OnMenuItemClickListener {
     private lateinit var extensions: ExtensionManager
     private lateinit var storedAdapter: ExtensionAdapter<StoredExtension>
     private lateinit var remoteAdapter: ExtensionAdapter<RemoteExtension>

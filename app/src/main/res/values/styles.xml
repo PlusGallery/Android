@@ -22,20 +22,13 @@
     </style>
 
     <!-- Fullscreen application theme. -->
-    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">#44000000</item>
-
+    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/black_overlay</item>
         <item name="colorPrimaryDark">@color/black_overlay</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">@android:color/black</item>
         <!-- Fix home button color -->
         <item name="android:textColorSecondary">@color/white</item>
-
-        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <!-- Custom components style for themes -->

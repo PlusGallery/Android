@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/preview_info"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="@string/preview_info"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/preview_share"
+        android:icon="@drawable/ic_baseline_share_24"
+        android:title="@string/preview_share"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/navigation_collections"
+        android:icon="@drawable/ic_baseline_collections_24"
+        android:title="@string/title_collections" />
+</menu>

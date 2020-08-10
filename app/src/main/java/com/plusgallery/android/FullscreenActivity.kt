@@ -26,8 +26,8 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
             val prevPosition = page.selectedPos
             page.selectedPos = position
             val submission = page.submissions[position]
-            toolBar.title = submission.title()
-            toolBar.subtitle = submission.author()
+            title = getString(R.string.preview_by) + " " + submission.author()
+            supportActionBar?.subtitle = submission.title()
             textFavs.text = submission.favourites().toString()
 
             val recycler = viewPager[0] as RecyclerView
@@ -44,7 +44,7 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
-        setSupportActionBar(toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val position = intent.getIntExtra("page", 0)
         page = (application as GApplication).pages[position] as SearchPage
         page.setSearchPageAction(this)
@@ -59,6 +59,11 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         viewPager.post{ onPageChange.onPageSelected(page.selectedPos) }
         // Setup on page change updater
         viewPager.registerOnPageChangeCallback(onPageChange)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.preview_fullscreen, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

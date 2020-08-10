@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.plusgallery.android.adapter.SubmissionAdapter
 import com.plusgallery.android.page.SearchPage
 import com.plusgallery.android.page.SearchPageAction
+import com.plusgallery.android.view.InformationDialog
 import com.thefuntasty.hauler.setOnDragDismissedListener
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 
@@ -26,18 +27,18 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
             val prevPosition = page.selectedPos
             page.selectedPos = position
             val submission = page.submissions[position]
-            title = getString(R.string.preview_by) + " " + submission.author()
+            title = getString(R.string.preview_by, submission.author())
             supportActionBar?.subtitle = submission.title()
             textFavs.text = submission.favourites().toString()
 
             val recycler = viewPager[0] as RecyclerView
             if (prevPosition != position) {
-                val prevHolder = recycler.findViewHolderForAdapterPosition(prevPosition) as SubmissionAdapter.PreviewHolder
-                prevHolder.unloadView()
+                val prevHolder = recycler.findViewHolderForAdapterPosition(prevPosition) as SubmissionAdapter.PreviewHolder?
+                prevHolder?.unloadView()
             }
-            val holder = recycler.findViewHolderForAdapterPosition(position) as SubmissionAdapter.PreviewHolder
-            holder.loadView()
-            page.tryAdvanceSearch()
+            val holder = recycler.findViewHolderForAdapterPosition(position) as SubmissionAdapter.PreviewHolder?
+            holder?.loadView()
+            page.tryAdvancePage()
         }
     }
 
@@ -46,7 +47,7 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         setContentView(R.layout.activity_fullscreen)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val position = intent.getIntExtra("page", 0)
-        page = (application as GApplication).pages[position] as SearchPage
+        page = GApplication.get.pages[position] as SearchPage
         page.setSearchPageAction(this)
         haulerView.setOnDragDismissedListener { finish() }
         // Single click events detection
@@ -61,6 +62,15 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         viewPager.registerOnPageChangeCallback(onPageChange)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        // Unload current view if exist
+        val recycler = viewPager[0] as RecyclerView
+        val prevHolder = recycler.findViewHolderForAdapterPosition(page.selectedPos)
+                as SubmissionAdapter.PreviewHolder?
+        prevHolder?.unloadView()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.preview_fullscreen, menu)
         return true
@@ -70,6 +80,11 @@ class FullscreenActivity : AppCompatActivity(), SearchPageAction {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
+                true
+            }
+            R.id.preview_info -> {
+                val dialog = InformationDialog.new(page.submissions[page.selectedPos])
+                dialog.show(supportFragmentManager, InformationDialog::class.simpleName)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -16,6 +16,7 @@ import com.plusgallery.android.R
 import com.plusgallery.android.adapter.TabPagerAdapter
 import com.plusgallery.android.extension.StoredExtension
 import com.plusgallery.android.page.PageData
+import com.plusgallery.android.page.PageManager
 import com.plusgallery.android.page.SearchPage
 import com.plusgallery.android.view.ExtensionSelectDialog
 import com.plusgallery.android.view.IconPopupMenu
@@ -28,7 +29,7 @@ import kotlinx.android.synthetic.main.include_search_fragment.*
 class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongClickListener,
     View.OnClickListener, PopupMenu.OnMenuItemClickListener, ExtensionSelectDialog.OnNewAction,
     TabLayoutMediator.TabConfigurationStrategy {
-    private lateinit var app: GApplication
+    private lateinit var pages: PageManager
     lateinit var adapter: TabPagerAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,7 +38,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        app = requireActivity().application as GApplication
+        pages = GApplication.get.pages
         // Initialize searchBar
         searchBar.setOnSearchBarListener(this)
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -47,7 +48,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
         // Initialize fab controls
         controlFab.setOnClickListener(this)
         // Initialize tabLayout
-        adapter = TabPagerAdapter(app.pages, this)
+        adapter = TabPagerAdapter(pages, this)
         viewPager.adapter = adapter
         TabLayoutMediator(tabLayout, viewPager, this).attach()
     }
@@ -81,7 +82,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
         if (selected < 0) { // Not active tabs
             return
         }
-        val page = app.pages[selected]
+        val page = pages[selected]
         if (page is SearchPage)
             searchBar.setText(page.parameters)
     }
@@ -90,13 +91,12 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
         searchBar.closeSearch()
         val selected = tabLayout.selectedTabPosition
         if (selected < 0) {
-            val selectDialog = ExtensionSelectDialog.new(requireActivity().supportFragmentManager,
-                app.extensions.storedArray())
+            val selectDialog = ExtensionSelectDialog()
             selectDialog.setOnExtensionSelect(this)
-            selectDialog.show(-1, text.toString())
+            selectDialog.show(requireActivity().supportFragmentManager, -1, text.toString())
             return
         }
-        val page = app.pages[selected]
+        val page = pages[selected]
         if (page is SearchPage) {
             page.searchRequest(text.toString())
             onConfigureTab(tabLayout.getTabAt(selected)!!, selected)
@@ -105,7 +105,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
 
     override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
         tab.view.setOnLongClickListener(this)
-        val page = app.pages[position]
+        val page = pages[position]
         tab.text = page.title()
         tab.icon = page.icon(requireContext())
     }
@@ -127,7 +127,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
                 val position = tabLayout.selectedTabPosition
                 if (position < 0)
                     return true
-                val page = app.pages[position].copy()
+                val page = pages[position].copy()
                 appendNewPage(position, page, false)
 
             }
@@ -139,10 +139,9 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
     override fun onClick(v: View) {
         if (searchBar.isSearchOpened())
             searchBar.closeSearch()
-        val selectDialog = ExtensionSelectDialog.new(requireActivity().supportFragmentManager,
-            app.extensions.storedArray())
+        val selectDialog = ExtensionSelectDialog()
         selectDialog.setOnExtensionSelect(this)
-        selectDialog.show()
+        selectDialog.show(requireActivity().supportFragmentManager)
     }
 
     override fun onExtensionSelect(index: Int, text: String?, extension: StoredExtension) {
@@ -158,7 +157,7 @@ class SearchFragment : Fragment(), SearchBar.OnSearchBarListener, View.OnLongCli
         val position = tabLayout.selectedTabPosition
         if (position < 0)
             return null
-        return app.pages[position]
+        return pages[position]
     }
 
     private fun appendNewPage(index: Int, page: PageData, scroll: Boolean = false): Int {

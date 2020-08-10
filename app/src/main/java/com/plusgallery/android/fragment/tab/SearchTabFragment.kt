@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_tab_search.*
 
 class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAction,
     CompoundButton.OnCheckedChangeListener, SearchPageAction {
-    private lateinit var app: GApplication
     private lateinit var page: SearchPage
     private lateinit var mAdapter: SearchAdapter
     private lateinit var mLayoutManager: GridLayoutManager
@@ -40,9 +39,8 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
         super.onCreate(savedInstanceState)
         // Set properties here in case app.page called before
         // view called
-        app = requireActivity().application as GApplication
         if (savedInstanceState != null) {
-            page = app.pages.popSearchPage(savedInstanceState)
+            page = GApplication.get.pages.popSearchPage(savedInstanceState)
         }
     }
 
@@ -77,7 +75,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 page.selectedPos = mLayoutManager.findFirstCompletelyVisibleItemPosition()
-                page.tryAdvanceSearch()
+                page.tryAdvancePage()
             }
         })
 
@@ -95,7 +93,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        app.pages.pushSearchPage(outState, page)
+        GApplication.get.pages.pushSearchPage(outState, page)
         super.onSaveInstanceState(outState)
     }
 
@@ -129,7 +127,7 @@ class SearchTabFragment : Fragment(), TabLayout.OnTabSelectedListener, OnItemAct
     override fun onItemPress(item: Any?, view: View) {
         page.selectedPos = item as Int
         val intent = Intent(activity, FullscreenActivity::class.java)
-        intent.putExtra("page", app.pages.indexOf(page))
+        intent.putExtra("page", GApplication.get.pages.indexOf(page))
         startActivity(intent, Animate.clipReveal(view))
     }
 

@@ -73,6 +73,7 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
         if (value != null)
             parameters = value
         isSearching = true
+        page = 1
         searchAction?.onNewSearchBegin()
         handler.search(this) {
             Threading.sync {
@@ -86,7 +87,7 @@ class SearchPage(val extension: StoredExtension, session: Session): PageData(), 
         }
     }
 
-    fun tryAdvanceSearch() {
+    fun tryAdvancePage() {
         if (submissions.size - selectedPos > WebRequest.limit / 2
             || isSearching)
             return // Return if working or too many unseen submissions

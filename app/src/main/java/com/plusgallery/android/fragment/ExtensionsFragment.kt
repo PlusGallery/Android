@@ -35,7 +35,7 @@ class ExtensionsFragment : Fragment(), OnItemAction, PopupMenu.OnMenuItemClickLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        extensions = (requireActivity().application as GApplication).extensions
+        extensions = GApplication.get.extensions
         // Stored
         storedRecyclerView.layoutManager = LinearLayoutManager(context)
         storedAdapter = ExtensionAdapter(requireContext(), this)

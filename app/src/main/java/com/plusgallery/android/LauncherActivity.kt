@@ -19,8 +19,8 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        (application as GApplication).extensions.fetchStored()
-        (application as GApplication).extensions.fetchRemote {
+        GApplication.get.extensions.fetchStored()
+        GApplication.get.extensions.fetchRemote {
             Threading.sync {
                 if (!it) {
                     Toast.makeText(this, getString(R.string.launcher_error),

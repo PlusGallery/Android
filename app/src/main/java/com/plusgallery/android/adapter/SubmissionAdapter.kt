@@ -28,14 +28,7 @@ import java.net.URLConnection
 class SubmissionAdapter(private var parent: FullscreenActivity, private var page: SearchPage) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val glide = GlideApp.with(parent)
 
-    private val detector = GestureDetector(parent, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-            if (parent.mVisible) parent.hide() else parent.show()
-            return true
-        }
-    })
-
-    inner class PreviewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class PreviewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         lateinit var submission: Submission
         var preview: Bitmap? = null
         var largeTarget: Target<*>? = null
@@ -51,23 +44,22 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
             }
         }
 
-    val onObjectReady = object : RequestListener<Drawable> {
-        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
-                                     dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-            parent.setContentType(R.drawable.ic_baseline_image_24)
-            itemView.imageView.isZoomable = true
-            itemView.imageView.isTranslatable = true
-            return false // allow Glide's request to update target
+        val onObjectReady = object : RequestListener<Drawable> {
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
+                                         dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                parent.setContentType(R.drawable.ic_baseline_image_24)
+                itemView.imageView.isZoomable = true
+                itemView.imageView.isTranslatable = true
+                return false // allow Glide's request to update target
+            }
+
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                parent.setContentType(R.drawable.ic_baseline_image_24)
+                itemView.imageView.setImageResource(R.drawable.ic_baseline_error_24)
+                return true
+            }
         }
 
-        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-            parent.setContentType(R.drawable.ic_baseline_image_24)
-            itemView.imageView.setImageResource(R.drawable.ic_baseline_error_24)
-            return true
-        }
-    }
-
-        @SuppressLint("ClickableViewAccessibility")
         fun bindView(position: Int) {
             submission = page.submissions[position]
 
@@ -77,10 +69,8 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
             glide.clear(thumbTarget)
             glide.asBitmap().load(submission.thumbnail())
                 .into(thumbTarget)
-            itemView.imageView.setOnTouchListener { _, event ->
-                detector.onTouchEvent(event)
-                false
-            }
+            itemView.imageView.setOnClickListener(this)
+            itemView.videoView.setOnClickListener(this)
         }
 
         fun unloadView() {
@@ -120,6 +110,10 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
                 }
                 else -> parent.setContentType(R.drawable.ic_baseline_file_24)
             }
+        }
+
+        override fun onClick(p0: View?) {
+            if (parent.mVisible) parent.hide() else parent.show()
         }
     }
 

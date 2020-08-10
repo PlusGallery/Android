@@ -20,7 +20,7 @@ class ExtensionSelectAdapter(var array: Array<StoredExtension>, private val dial
             itemView.icon.setImageDrawable(item.getAppIcon(context))
 
             itemView.linearLayout.setOnClickListener {
-                dialog.onItemPress(position, itemView.linearLayout)
+                dialog.onItemPress(item, itemView.linearLayout)
             }
         }
     }

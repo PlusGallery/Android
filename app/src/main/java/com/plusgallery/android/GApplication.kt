@@ -1,7 +1,9 @@
 package com.plusgallery.android
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.Fragment
 import com.plusgallery.android.extension.ExtensionManager
 import com.plusgallery.android.page.PageManager
 import com.plusgallery.android.util.Preference
@@ -22,8 +24,14 @@ class GApplication: Application() {
     lateinit var extensions: ExtensionManager
     lateinit var pages: PageManager
 
+    companion object {
+        lateinit var get: GApplication
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
+        get = this
         extensions = ExtensionManager(this)
         pages = PageManager()
         updateTheme()

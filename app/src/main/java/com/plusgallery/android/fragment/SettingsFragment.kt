@@ -8,15 +8,13 @@ import com.plusgallery.android.view.AccountPreference
 import com.plusgallery.extension.ui.UIContextWrapper
 
 class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceClickListener {
-    lateinit var app : GApplication
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.fragment_settings, rootKey)
         findPreference<SwitchPreferenceCompat>("night")?.onPreferenceClickListener = this
         findPreference<EditTextPreference>("limit")?.onPreferenceClickListener = this
 
-        app = requireActivity().application as GApplication
         val root = findPreference<PreferenceCategory>("accounts")
-        app.extensions.storedArray().forEach {
+        GApplication.get.extensions.storedArray().forEach {
             val preference = AccountPreference(requireContext())
             preference.key = it.packageName
             preference.onPreferenceClickListener = this
@@ -30,7 +28,7 @@ class SettingsFragment: PreferenceFragmentCompat(), Preference.OnPreferenceClick
         when (preference?.key) {
             "night" -> (activity?.application as GApplication).updateTheme()
             else -> {
-                val ext = app.extensions.retrieve(preference!!.key)
+                val ext = GApplication.get.extensions.retrieve(preference!!.key)
                 if (ext != null) {
                     val ctx = UIContextWrapper(requireContext(), ext.getResources(requireContext()))
                     ext.baseClass.loginDialog.newInstance().show(parentFragmentManager, ctx)

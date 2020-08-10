@@ -60,6 +60,14 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
             }
         }
 
+        private val detector = GestureDetector(parent, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
+                if (parent.mVisible) parent.hide() else parent.show()
+                return true
+            }
+        })
+
+        @SuppressLint("ClickableViewAccessibility")
         fun bindView(position: Int) {
             submission = page.submissions[position]
 
@@ -69,7 +77,10 @@ class SubmissionAdapter(private var parent: FullscreenActivity, private var page
             glide.clear(thumbTarget)
             glide.asBitmap().load(submission.thumbnail())
                 .into(thumbTarget)
-            itemView.imageView.setOnClickListener(this)
+            itemView.imageView.setOnTouchListener { _, event ->
+                detector.onTouchEvent(event)
+                false
+            }
             itemView.videoView.setOnClickListener(this)
         }
 
